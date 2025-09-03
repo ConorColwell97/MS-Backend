@@ -2,10 +2,13 @@ package com.example.MS_Backend.services;
 
 import com.example.MS_Backend.models.User;
 import com.example.MS_Backend.repository.UserRepo;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.mongodb.MongoWriteException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -46,6 +49,5 @@ public class UserService {
         } else {
             throw new RuntimeException("Incorrect password");
         }
-
     }
 }
