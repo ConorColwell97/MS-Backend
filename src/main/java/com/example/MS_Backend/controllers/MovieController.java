@@ -1,5 +1,6 @@
 package com.example.MS_Backend.controllers;
 
+import com.example.MS_Backend.models.User;
 import com.example.MS_Backend.services.MovieService;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,4 +30,15 @@ public class MovieController {
     public void addMovies(@PathVariable String username, @RequestBody List<Map<String, String>> movies) {
         service.addMovies(username, movies);
     }
+
+    @GetMapping("/getmovies/{username}")
+    public JsonNode getMoviesByUser(@PathVariable String username) throws Exception {
+        return service.getMovies(username);
+    }
+
+    @PatchMapping("/deletemovie/{username}/{title}")
+    public void removeMovie(@PathVariable String username, @PathVariable String title) {
+        service.deleteMovies(username, title);
+    }
+
 }

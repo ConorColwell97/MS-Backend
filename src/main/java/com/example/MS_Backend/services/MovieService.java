@@ -1,11 +1,18 @@
 package com.example.MS_Backend.services;
 
 import com.example.MS_Backend.models.User;
+import com.example.MS_Backend.repository.MovieRepo;
 import com.example.MS_Backend.repository.UserRepo;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.BasicDBObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -19,8 +26,14 @@ public class MovieService {
     @Autowired
     private UserRepo repo;
 
+    @Autowired
+    private MovieRepo movieRepo;
+
     @Value("${tmdb.api.key}")
     private String apiKey;
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
@@ -51,7 +64,6 @@ public class MovieService {
         JsonNode results = jsonNode.get("results");
 
         if(results.isEmpty()) {
-            System.out.println(HttpStatus.NOT_FOUND);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No results found");
         }
 
@@ -87,5 +99,18 @@ public class MovieService {
         currUser.setMovies(currMovies);
 
         repo.save(currUser);
+    }
+
+    public JsonNode getMovies(String username) throws JsonProcessingException {
+        String results = movieRepo.findByUsername(username).orElse(null);
+        return objectMapper.readTree(results);
+    }
+
+    public void deleteMovies(String username, String title) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("username").is(username));
+
+        Update update = new Update().pull("movies", new BasicDBObject("title", title));
+        mongoTemplate.updateFirst(query, update, User.class);
     }
 }
