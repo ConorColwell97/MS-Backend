@@ -1,5 +1,6 @@
 package com.example.MS_Backend.services;
 
+import com.example.MS_Backend.models.User;
 import com.example.MS_Backend.repository.UserRepo;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,7 +38,7 @@ public class MovieService {
         return json.get("genres");
     }
 
-    public List<Map<String, JsonNode>> searchMovies(String filters) throws Exception {
+    public List<Map<String, String>> searchMovies(String filters) throws Exception {
         String url = "http://api.themoviedb.org/3/discover/movie?api_key=" + apiKey + "&" + filters;
 
         Random rand = new Random();
@@ -54,7 +55,7 @@ public class MovieService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No results found");
         }
 
-        List<Map<String, JsonNode>> movies = new ArrayList<>();
+        List<Map<String, String>> movies = new ArrayList<>();
 
         for(JsonNode json : results) {
             JsonNode title = json.get("title");
@@ -62,15 +63,29 @@ public class MovieService {
             JsonNode releaseDate = json.get("release_date");
             JsonNode overview = json.get("overview");
 
-            Map<String, JsonNode> movie = new HashMap<>();
-            movie.put("title", title);
-            movie.put("genres", genres);
-            movie.put("releaseDate", releaseDate);
-            movie.put("overview", overview);
+            Map<String, String> movie = new HashMap<>();
+            movie.put("title", title.toString().replaceAll("\"", ""));
+            movie.put("genres", genres.toString().replaceAll("[\"\\[\\]]", ""));
+            movie.put("releaseDate", releaseDate.toString().replaceAll("\"", ""));
+            movie.put("overview", overview.toString().replaceAll("\"", ""));
 
             movies.add(movie);
         }
 
         return movies;
+    }
+
+    public void addMovies(String username, List<Map<String, String>> movies) {
+        User currUser = repo.findByUsername(username).orElse(null);
+
+        if(currUser == null) {
+            throw new RuntimeException("User not found");
+        }
+
+        List<Map<String, String>> currMovies = currUser.getMovies();
+        currMovies.addAll(movies);
+        currUser.setMovies(currMovies);
+
+        repo.save(currUser);
     }
 }

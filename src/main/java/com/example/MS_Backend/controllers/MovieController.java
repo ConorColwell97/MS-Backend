@@ -3,10 +3,7 @@ package com.example.MS_Backend.controllers;
 import com.example.MS_Backend.services.MovieService;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -24,7 +21,12 @@ public class MovieController {
     }
 
     @GetMapping("/mymovies/{filters}")
-    public List<Map<String, JsonNode>> getMovies(@PathVariable String filters) throws Exception {
+    public List<Map<String, String>> getMovies(@PathVariable String filters) throws Exception {
         return service.searchMovies(filters);
+    }
+
+    @PutMapping("/addmovies/{username}")
+    public void addMovies(@PathVariable String username, @RequestBody List<Map<String, String>> movies) {
+        service.addMovies(username, movies);
     }
 }

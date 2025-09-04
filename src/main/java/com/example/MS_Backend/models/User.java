@@ -1,12 +1,12 @@
 package com.example.MS_Backend.models;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Document
 public class User {
@@ -18,13 +18,15 @@ public class User {
 
     private String password;
 
-    private List<JsonNode> movies;
+    private List<Map<String, String>> movies = new ArrayList<>();
 
-    public User(String id, String username, String password) {
+    public User() {}
+
+    public User(String id, String username, String password, List<Map<String, String>> movies) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.movies = new ArrayList<>();
+        this.movies = movies;
     }
 
     public String getId() {
@@ -51,11 +53,11 @@ public class User {
         this.password = password;
     }
 
-    public List<JsonNode> getMovies() {
+    public List<Map<String, String>> getMovies() {
         return movies;
     }
 
-    public void setMovies(List<JsonNode> movies) {
+    public void setMovies(List<Map<String, String>> movies) {
         this.movies = movies;
     }
 }
