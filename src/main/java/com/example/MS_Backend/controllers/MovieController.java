@@ -23,8 +23,8 @@ public class MovieController {
         return service.getGenres();
     }
 
-    @GetMapping("/mymovies/{params}")
-    public List<Map<String, JsonNode>> getMovies(@PathVariable String params) throws Exception {
-        return service.searchMovies(params);
+    @GetMapping("/mymovies/{filters}")
+    public List<Map<String, JsonNode>> getMovies(@PathVariable String filters) throws Exception {
+        return service.searchMovies(filters);
     }
 }

@@ -37,13 +37,8 @@ public class MovieService {
         return json.get("genres");
     }
 
-    public List<Map<String, JsonNode>> searchMovies(String params) throws Exception {
-        List <String> filters = Arrays.asList(params.split("&"));
-        String url = "http://api.themoviedb.org/3/discover/movie?api_key=" + apiKey;
-
-        for(String filter : filters) {
-            url += ("&" + filter);
-        }
+    public List<Map<String, JsonNode>> searchMovies(String filters) throws Exception {
+        String url = "http://api.themoviedb.org/3/discover/movie?api_key=" + apiKey + "&" + filters;
 
         Random rand = new Random();
         int page = rand.nextInt(100) + 1;
