@@ -1,8 +1,11 @@
 package com.example.MS_Backend.controllers;
 
 import com.example.MS_Backend.models.User;
+import com.example.MS_Backend.services.JWTService;
 import com.example.MS_Backend.services.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseCookie;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -12,14 +15,35 @@ public class UserController {
     @Autowired
     private UserService service;
 
+    @Autowired
+    private JWTService jwtService;
+
     @PostMapping("/register")
-    public String addUser(@RequestBody User user) {
-        return service.addUser(user);
+    public void addUser(@RequestBody User user, HttpServletResponse response) {
+        String token = jwtService.generateToken(user.getUsername());
+        ResponseCookie cookie = ResponseCookie.from("token", token)
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(1800)
+                .sameSite("Strict")
+                .build();
+        response.setHeader("Set cookie", cookie.toString());
+        service.addUser(user);
     }
 
     @PostMapping("/userLogin")
-    public String login(@RequestBody User user) {
-        return service.login(user);
+    public void login(@RequestBody User user, HttpServletResponse response) {
+        service.login(user);
+        String token = jwtService.generateToken(user.getUsername());
+        ResponseCookie cookie = ResponseCookie.from("token", token)
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(1800)
+                .sameSite("Strict")
+                .build();
+        response.setHeader("Set cookie", cookie.toString());
     }
 
     @PatchMapping("/updatename/{username}/{newUsername}")

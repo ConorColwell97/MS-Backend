@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -27,12 +28,11 @@ public class UserService {
 
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
-    public String addUser(User user) {
+    public void addUser(User user) {
         user.setPassword(encoder.encode(user.getPassword()));
 
         try {
             repo.save(user);
-            return jwtService.generateToken(user.getUsername());
         } catch(MongoWriteException e) {
             if (e.getError().getCategory() == com.mongodb.ErrorCategory.DUPLICATE_KEY) {
                 throw new RuntimeException("Username '"+user.getUsername()+"' already exists");
@@ -51,7 +51,7 @@ public class UserService {
         boolean matches = encoder.matches(user.getPassword(), currUser.getPassword());
 
         if(matches) {
-            return jwtService.generateToken(user.getUsername());
+            return user.getUsername();
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Incorrect password");
         }
