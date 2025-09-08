@@ -1,6 +1,5 @@
 package com.example.MS_Backend.controllers;
 
-import com.example.MS_Backend.models.User;
 import com.example.MS_Backend.services.JWTService;
 import com.example.MS_Backend.services.MovieService;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -75,6 +74,8 @@ public class MovieController {
                             .build()
                             .parseSignedClaims(token)
                             .getPayload();
+                    System.out.println("IAT: " + claims.getIssuedAt());
+                    System.out.println("EXP" + claims.getExpiration());
 
                 } catch(ExpiredJwtException e) {
                     expired = true;
@@ -96,7 +97,7 @@ public class MovieController {
                     .httpOnly(true)
                     .secure(true)
                     .path("/")
-                    .maxAge(30)
+                    .maxAge(1800)
                     .sameSite("None")
                     .build();
             response.setHeader("Set-Cookie", cookie.toString());

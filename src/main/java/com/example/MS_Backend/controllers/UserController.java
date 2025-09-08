@@ -30,7 +30,7 @@ public class UserController {
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
-                .maxAge(30)
+                .maxAge(1800)
                 .sameSite("None")
                 .build();
         response.setHeader("Set-Cookie", cookie.toString());
@@ -44,7 +44,7 @@ public class UserController {
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
-                .maxAge(30)
+                .maxAge(1800)
                 .sameSite("None")
                 .build();
         response.setHeader("Set-Cookie", cookie.toString());
@@ -85,6 +85,8 @@ public class UserController {
                             .build()
                             .parseSignedClaims(token)
                             .getPayload();
+                    System.out.println("IAT: " + claims.getIssuedAt());
+                    System.out.println("EXP" + claims.getExpiration());
 
                 } catch(ExpiredJwtException e) {
                     expired = true;
@@ -106,7 +108,7 @@ public class UserController {
                     .httpOnly(true)
                     .secure(true)
                     .path("/")
-                    .maxAge(30)
+                    .maxAge(1800)
                     .sameSite("None")
                     .build();
             response.setHeader("Set-Cookie", cookie.toString());
