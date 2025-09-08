@@ -28,11 +28,12 @@ public class UserService {
 
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
-    public void addUser(User user) {
+    public String addUser(User user) {
         user.setPassword(encoder.encode(user.getPassword()));
 
         try {
             repo.save(user);
+            return user.getUsername() + " created";
         } catch(MongoWriteException e) {
             if (e.getError().getCategory() == com.mongodb.ErrorCategory.DUPLICATE_KEY) {
                 throw new RuntimeException("Username '"+user.getUsername()+"' already exists");
@@ -51,7 +52,7 @@ public class UserService {
         boolean matches = encoder.matches(user.getPassword(), currUser.getPassword());
 
         if(matches) {
-            return user.getUsername();
+            return user.getUsername() + " logged in";
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Incorrect password");
         }
