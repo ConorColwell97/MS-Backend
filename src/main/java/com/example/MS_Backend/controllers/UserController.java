@@ -89,6 +89,7 @@ public class UserController {
                     System.out.println("EXP" + claims.getExpiration());
 
                 } catch(ExpiredJwtException e) {
+                    System.out.println("Token expired");
                     expired = true;
                 } catch(JwtException e) {
                     System.out.println("This token is not valid");
@@ -101,7 +102,6 @@ public class UserController {
         }
 
         if(expired) {
-            System.out.println("Token or cookies expired");
             String token = jwtService.generateToken(username);
 
             ResponseCookie cookie = ResponseCookie.from("token", token)
