@@ -36,7 +36,7 @@ public class MovieController {
     public JsonNode getMoviesByUser(@PathVariable String username, HttpServletRequest request) throws Exception {
         Cookie[] cookies = request.getCookies();
         for(Cookie cookie : cookies) {
-            System.out.println(cookie);
+            System.out.println("This cookie is: " + cookie.getName() + ": " + cookie.getValue());
         }
         return service.getMovies(username);
     }
