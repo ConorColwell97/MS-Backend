@@ -72,6 +72,18 @@ public class UserController {
         }
     }
 
+    @DeleteMapping("/userLogout")
+    public void logout(HttpServletResponse response) {
+        ResponseCookie cookie = ResponseCookie.from("token", "")
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(0)
+                .sameSite("None")
+                .build();
+        response.setHeader("Set-Cookie", cookie.toString());
+    }
+
     public boolean verify(HttpServletRequest request, HttpServletResponse response, String username) {
         Cookie[] cookies = request.getCookies();
         boolean expired = false;
