@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseCookie;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin
 @RestController
 public class UserController {
 
@@ -28,7 +27,7 @@ public class UserController {
                 .maxAge(1800)
                 .sameSite("Strict")
                 .build();
-        response.setHeader("Set cookie", cookie.toString());
+        response.setHeader("Set-Cookie", cookie.toString());
         service.addUser(user);
     }
 
@@ -43,7 +42,7 @@ public class UserController {
                 .maxAge(1800)
                 .sameSite("Strict")
                 .build();
-        response.setHeader("Set cookie", cookie.toString());
+        response.setHeader("Set-Cookie", cookie.toString());
     }
 
     @PatchMapping("/updatename/{username}/{newUsername}")

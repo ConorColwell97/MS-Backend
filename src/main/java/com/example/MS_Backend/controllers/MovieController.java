@@ -3,13 +3,14 @@ package com.example.MS_Backend.controllers;
 import com.example.MS_Backend.models.User;
 import com.example.MS_Backend.services.MovieService;
 import com.fasterxml.jackson.databind.JsonNode;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin
 @RestController
 public class MovieController {
 
@@ -32,7 +33,11 @@ public class MovieController {
     }
 
     @GetMapping("/getmovies/{username}")
-    public JsonNode getMoviesByUser(@PathVariable String username) throws Exception {
+    public JsonNode getMoviesByUser(@PathVariable String username, HttpServletRequest request) throws Exception {
+        Cookie[] cookies = request.getCookies();
+        for(Cookie cookie : cookies) {
+            System.out.println(cookie);
+        }
         return service.getMovies(username);
     }
 
