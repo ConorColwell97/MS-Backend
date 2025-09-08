@@ -25,7 +25,7 @@ public class UserController {
                 .secure(true)
                 .path("/")
                 .maxAge(1800)
-                .sameSite("Strict")
+                .sameSite("None")
                 .build();
         response.setHeader("Set-Cookie", cookie.toString());
         service.addUser(user);
@@ -40,7 +40,7 @@ public class UserController {
                 .secure(true)
                 .path("/")
                 .maxAge(1800)
-                .sameSite("Strict")
+                .sameSite("None")
                 .build();
         response.setHeader("Set-Cookie", cookie.toString());
     }
