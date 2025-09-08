@@ -87,7 +87,7 @@ public class MovieController {
             }
         } else {
             System.out.println("Cookie expired or removed");
-            expired = true;
+            return false;
         }
 
         if(expired) {

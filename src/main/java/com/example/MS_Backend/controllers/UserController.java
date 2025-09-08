@@ -98,7 +98,7 @@ public class UserController {
             }
         } else {
             System.out.println("Cookie expired or removed");
-            expired = true;
+            return false;
         }
 
         if(expired) {
