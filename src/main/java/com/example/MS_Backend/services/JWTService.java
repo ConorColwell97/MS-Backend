@@ -3,6 +3,7 @@ package com.example.MS_Backend.services;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.KeyGenerator;
@@ -15,17 +16,10 @@ import java.util.Date;
 @Service
 public class JWTService {
 
-    private String secretkey;
+    private final String secretKey;
 
-    public JWTService() {
-
-        try {
-            KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
-            SecretKey sk = keyGen.generateKey();
-            secretkey = Base64.getEncoder().encodeToString(sk.getEncoded());
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
+    public JWTService(@Value("${jwt.secret}") String secretKey) {
+        this.secretKey = secretKey;
     }
 
     public String generateToken(String username) {
@@ -39,7 +33,7 @@ public class JWTService {
     }
 
     private Key getKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretkey);
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
