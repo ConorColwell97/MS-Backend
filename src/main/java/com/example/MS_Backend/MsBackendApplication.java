@@ -21,7 +21,8 @@ public class MsBackendApplication {
                 registry.addMapping("/**")
                         .allowedOrigins("https://Movie-spin.vercel.app")
                         .allowCredentials(true)
-                        .allowedMethods("GET", "POST", "DELETE", "PUT", "PATCH", "OPTIONS");
+                        .allowedMethods("GET", "POST", "DELETE", "PUT", "PATCH", "OPTIONS")
+                        .allowedHeaders("Authorization","Content-Type","Accept");
             }
         };
     }
