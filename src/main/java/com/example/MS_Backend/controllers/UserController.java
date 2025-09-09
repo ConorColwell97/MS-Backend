@@ -102,7 +102,7 @@ public class UserController {
 
                 } catch(ExpiredJwtException e) {
                     System.out.println("Token expired");
-                    expired = true;
+                    throw new RuntimeException(e);
                 } catch(JwtException e) {
                     System.out.println("This token is not valid");
                     throw new RuntimeException(e);
@@ -113,18 +113,18 @@ public class UserController {
             return false;
         }
 
-        if(expired) {
-            String token = jwtService.generateToken(username);
-
-            ResponseCookie cookie = ResponseCookie.from("token", token)
-                    .httpOnly(true)
-                    .secure(true)
-                    .path("/")
-                    .maxAge(1800)
-                    .sameSite("None")
-                    .build();
-            response.setHeader("Set-Cookie", cookie.toString());
-        }
+//        if(expired) {
+//            String token = jwtService.generateToken(username);
+//
+//            ResponseCookie cookie = ResponseCookie.from("token", token)
+//                    .httpOnly(true)
+//                    .secure(true)
+//                    .path("/")
+//                    .maxAge(1800)
+//                    .sameSite("None")
+//                    .build();
+//            response.setHeader("Set-Cookie", cookie.toString());
+//        }
         return true;
     }
 }
