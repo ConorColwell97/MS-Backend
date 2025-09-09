@@ -15,8 +15,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/register" ,"/userLogin", "/genres/{username}",
                                 "/mymovies/{username}/{filters}", "/addmovies/{username}", "/getmovies/{username}",
-                                "/deletemovies/{username}","/updatename/{username}",
-                                "/updatepw/{username}", "/delete/{username}", "/userLogout", "/error").permitAll()
+                                "/deletemovies/{username}","/updatename/{username}/{newUsername}",
+                                "/updatepw/{username}/{newPassword}", "/delete/{username}", "/userLogout", "/error").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(customizer -> customizer.disable())
