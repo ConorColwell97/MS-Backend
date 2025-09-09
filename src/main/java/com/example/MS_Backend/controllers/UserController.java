@@ -51,15 +51,15 @@ public class UserController {
         return service.login(user);
     }
 
-    @PatchMapping("/updatename/{username}/{newUsername}")
-    public void changeName(@PathVariable String username, @PathVariable String newUsername, HttpServletRequest request, HttpServletResponse response) {
+    @PatchMapping("/updatename/{username}")
+    public void changeName(@PathVariable String username, @RequestBody String newUsername, HttpServletRequest request, HttpServletResponse response) {
         if(verify(request, response, username)) {
             service.updateUsername(username, newUsername);
         }
     }
 
-    @PatchMapping("/updatepw/{username}/{newPassword}")
-    public void changePassword(@PathVariable String username, @PathVariable String newPassword, HttpServletRequest request, HttpServletResponse response) {
+    @PatchMapping("/updatepw/{username}")
+    public void changePassword(@PathVariable String username, @RequestBody String newPassword, HttpServletRequest request, HttpServletResponse response) {
         if(verify(request, response, username)) {
             service.updatePassword(username, newPassword);
         }
