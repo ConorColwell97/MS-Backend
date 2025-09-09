@@ -16,7 +16,7 @@ public class SecurityConfig {
                         .requestMatchers("/register" ,"/userLogin", "/genres/{username}",
                                 "/mymovies/{username}/{filters}", "/addmovies/{username}", "/getmovies/{username}",
                                 "/deletemovies/{username}","/updatename/{username}",
-                                "/updatepw/{username}", "/delete/{username}", "/userLogout", "/error").permitAll()
+                                "/updatepw/{username}", "/delete/{username}/{password}", "/userLogout", "/error").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(customizer -> customizer.disable())

@@ -53,7 +53,7 @@ public class UserService {
         if(matches) {
             return user.getUsername() + " logged in";
         } else {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Incorrect password");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Incorrect password");
         }
     }
 
@@ -74,7 +74,19 @@ public class UserService {
         mongoTemplate.updateFirst(query, update, User.class);
     }
 
-    public void deleteUser(String username) {
-        repo.deleteByUsername(username);
+    public void deleteUser(String username, String password) {
+        User user = repo.findByUsername(username).orElse(null);
+
+        if(user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+
+        boolean matches = encoder.matches(user.getPassword(), password);
+
+        if(matches) {
+            repo.deleteByUsername(username);
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Incorrect password");
+        }
     }
 }

@@ -68,10 +68,10 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/delete/{username}")
-    public void removeUser(@PathVariable String username, HttpServletRequest request, HttpServletResponse response) {
+    @DeleteMapping("/delete/{username}/{password}")
+    public void removeUser(@PathVariable String username, @PathVariable String password, HttpServletRequest request, HttpServletResponse response) {
         if(verify(request, response, username)) {
-            service.deleteUser(username);
+            service.deleteUser(username, password);
         }
     }
 
