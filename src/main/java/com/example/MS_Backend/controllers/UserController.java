@@ -3,6 +3,7 @@ package com.example.MS_Backend.controllers;
 import com.example.MS_Backend.models.User;
 import com.example.MS_Backend.services.JWTService;
 import com.example.MS_Backend.services.UserService;
+import com.fasterxml.jackson.databind.JsonNode;
 import io.jsonwebtoken.*;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -52,7 +53,8 @@ public class UserController {
     }
 
     @PatchMapping("/updatename/{username}")
-    public void changeName(@PathVariable String username, @RequestBody String newUsername, HttpServletRequest request, HttpServletResponse response) {
+    public void changeName(@PathVariable String username, @RequestBody JsonNode data, HttpServletRequest request, HttpServletResponse response) {
+        String newUsername = data.get("newName").asText();
         System.out.println("name: " + newUsername);
         if(verify(request, response, username)) {
             service.updateUsername(username, newUsername);
@@ -60,8 +62,9 @@ public class UserController {
     }
 
     @PatchMapping("/updatepw/{username}")
-    public void changePassword(@PathVariable String username, @RequestBody String newPassword, HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("name: " + newPassword);
+    public void changePassword(@PathVariable String username, @RequestBody JsonNode data, HttpServletRequest request, HttpServletResponse response) {
+        String newPassword = data.get("newPW").asText();
+        System.out.println("password: " + newPassword);
         if(verify(request, response, username)) {
             service.updatePassword(username, newPassword);
         }
