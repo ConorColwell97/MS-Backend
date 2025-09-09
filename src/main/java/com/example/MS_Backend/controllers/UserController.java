@@ -55,7 +55,6 @@ public class UserController {
     @PatchMapping("/updatename/{username}")
     public void changeName(@PathVariable String username, @RequestBody JsonNode data, HttpServletRequest request, HttpServletResponse response) {
         String newUsername = data.get("newName").asText();
-        System.out.println("name: " + newUsername);
         if(verify(request, response, username)) {
             service.updateUsername(username, newUsername);
         }
@@ -64,7 +63,6 @@ public class UserController {
     @PatchMapping("/updatepw/{username}")
     public void changePassword(@PathVariable String username, @RequestBody JsonNode data, HttpServletRequest request, HttpServletResponse response) {
         String newPassword = data.get("newPW").asText();
-        System.out.println("password: " + newPassword);
         if(verify(request, response, username)) {
             service.updatePassword(username, newPassword);
         }
@@ -102,8 +100,6 @@ public class UserController {
                             .build()
                             .parseSignedClaims(token)
                             .getPayload();
-                    System.out.println("IAT: " + claims.getIssuedAt());
-                    System.out.println("EXP" + claims.getExpiration());
 
                 } catch(ExpiredJwtException e) {
                     System.out.println("Token expired");
