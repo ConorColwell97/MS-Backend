@@ -81,9 +81,6 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
 
-        System.out.println("My password: " + user.getPassword());
-        System.out.println("My password: " + password);
-
         boolean matches = encoder.matches(password, user.getPassword());
 
         if(matches) {
