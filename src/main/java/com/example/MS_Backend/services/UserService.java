@@ -84,7 +84,7 @@ public class UserService {
         System.out.println("My password: " + user.getPassword());
         System.out.println("My password: " + password);
 
-        boolean matches = encoder.matches(user.getPassword(), password);
+        boolean matches = encoder.matches(password, user.getPassword());
 
         if(matches) {
             repo.deleteByUsername(username);
