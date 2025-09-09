@@ -75,7 +75,7 @@ public class MovieController {
                             .parseSignedClaims(token)
                             .getPayload();
                     System.out.println("IAT: " + claims.getIssuedAt());
-                    System.out.println("EXP" + claims.getExpiration());
+                    System.out.println("EXP: " + claims.getExpiration());
 
                 } catch(ExpiredJwtException e) {
                     System.out.println("Token expired");
