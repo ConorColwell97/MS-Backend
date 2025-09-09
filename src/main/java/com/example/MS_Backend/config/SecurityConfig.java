@@ -15,7 +15,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/register" ,"/userLogin", "/genres/{username}",
                                 "/mymovies/{username}/{filters}", "/addmovies/{username}", "/getmovies/{username}",
-                                "/deletemovie/{username}/{title}","/updatename/{username}/{newUsername}",
+                                "/deletemovies/{username}","/updatename/{username}/{newUsername}",
                                 "/updatepw/{username}/{newPassword}", "/delete/{username}", "/userLogout", "/error").permitAll()
                         .anyRequest().authenticated()
                 )

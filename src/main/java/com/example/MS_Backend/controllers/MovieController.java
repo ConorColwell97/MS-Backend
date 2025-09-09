@@ -54,10 +54,10 @@ public class MovieController {
         throw new RuntimeException("Authentication error");
     }
 
-    @PatchMapping("/deletemovie/{username}/{title}")
-    public void removeMovie(@PathVariable String username, @PathVariable String title, HttpServletRequest request, HttpServletResponse response) {
+    @PatchMapping("/deletemovies/{username}")
+    public void removeMovies(@PathVariable String username, @RequestBody List<String> titles, HttpServletRequest request, HttpServletResponse response) {
         if(verify(request, response, username)) {
-            service.deleteMovies(username, title);
+            service.deleteMovies(username, titles);
         }
     }
 

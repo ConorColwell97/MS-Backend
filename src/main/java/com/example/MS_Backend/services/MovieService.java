@@ -106,11 +106,13 @@ public class MovieService {
         return objectMapper.readTree(results);
     }
 
-    public void deleteMovies(String username, String title) {
+    public void deleteMovies(String username, List<String> titles) {
         Query query = new Query();
         query.addCriteria(Criteria.where("username").is(username));
 
-        Update update = new Update().pull("movies", new BasicDBObject("title", title));
-        mongoTemplate.updateFirst(query, update, User.class);
+        for(String title : titles) {
+            Update update = new Update().pull("movies", new BasicDBObject("title", title));
+            mongoTemplate.updateFirst(query, update, User.class);
+        }
     }
 }
