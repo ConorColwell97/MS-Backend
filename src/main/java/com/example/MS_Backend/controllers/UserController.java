@@ -72,6 +72,14 @@ public class UserController {
     public void removeUser(@PathVariable String username, @PathVariable String password, HttpServletRequest request, HttpServletResponse response) {
         if(verify(request, response, username)) {
             service.deleteUser(username, password);
+            ResponseCookie cookie = ResponseCookie.from("token", "")
+                    .httpOnly(true)
+                    .secure(true)
+                    .path("/")
+                    .maxAge(0)
+                    .sameSite("None")
+                    .build();
+            response.setHeader("Set-Cookie", cookie.toString());
         }
     }
 
