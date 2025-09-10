@@ -19,7 +19,7 @@ public class MsBackendApplication {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("https://Movie-spin.vercel.app")
+                        .allowedOrigins("https://Movie-spin.vercel.app", "http://localhost:5173")
                         .allowCredentials(true)
                         .allowedMethods("GET", "POST", "DELETE", "PUT", "PATCH", "OPTIONS")
                         .allowedHeaders("Authorization","Content-Type","Accept");
