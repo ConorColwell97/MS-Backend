@@ -23,13 +23,13 @@ public class MovieController {
     @Autowired
     private JWTService jwtService;
 
-    @GetMapping("/genres/{username}")
-    public JsonNode findGenres(@PathVariable String username, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        if(verify(request, response, username)) {
-            return service.getGenres();
-        }
-        throw new RuntimeException("Authentication error");
-    }
+//    @GetMapping("/genres/{username}")
+//    public JsonNode findGenres(@PathVariable String username, HttpServletRequest request, HttpServletResponse response) throws Exception {
+//        if(verify(request, response, username)) {
+//            return service.getGenres();
+//        }
+//        throw new RuntimeException("Authentication error");
+//    }
 
     @GetMapping("/mymovies/{username}/{filters}")
     public List<Map<String, String>> getMovies(@PathVariable String username, @PathVariable String filters, HttpServletRequest request, HttpServletResponse response) throws Exception {

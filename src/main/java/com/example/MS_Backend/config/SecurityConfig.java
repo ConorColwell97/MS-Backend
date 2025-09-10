@@ -13,7 +13,7 @@ public class SecurityConfig {
         http
             .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/register" ,"/userLogin", "/genres/{username}",
+                        .requestMatchers("/register" ,"/userLogin",
                                 "/mymovies/{username}/{filters}", "/addmovies/{username}", "/getmovies/{username}",
                                 "/deletemovies/{username}","/updatename/{username}",
                                 "/updatepw/{username}", "/delete/{username}/{password}", "/userLogout", "/error").permitAll()
