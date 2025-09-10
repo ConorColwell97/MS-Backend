@@ -28,6 +28,12 @@ public class UserService {
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     public String addUser(User user) {
+        User duplicate = repo.findByUsername(user.getUsername()).orElse(null);
+
+        if(duplicate != null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Duplicate user");
+        }
+
         user.setPassword(encoder.encode(user.getPassword()));
 
         try {
