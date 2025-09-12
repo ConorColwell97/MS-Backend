@@ -31,7 +31,7 @@ public class JWTService {
         String token = Jwts.builder()
                 .subject(username)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
+                .expiration(new Date(System.currentTimeMillis() + 30 * 60))
                 .signWith(getKey())
                 .compact();
 
