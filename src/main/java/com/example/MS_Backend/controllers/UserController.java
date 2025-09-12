@@ -10,8 +10,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
 
@@ -39,21 +41,33 @@ public class UserController {
     @PatchMapping("/updatename/{username}")
     public void changeName(@PathVariable String username, @RequestBody JsonNode data, HttpServletRequest request, HttpServletResponse response) {
         String newUsername = data.get("newName").asText();
-        jwtService.verifyToken(request, response, username);
-        service.updateUsername(username, newUsername);
+
+        if(jwtService.isValidToken(request, response, username)) {
+            service.updateUsername(username, newUsername);
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not authorized");
+        }
+
     }
 
     @PatchMapping("/updatepw/{username}")
     public void changePassword(@PathVariable String username, @RequestBody JsonNode data, HttpServletRequest request, HttpServletResponse response) {
         String newPassword = data.get("newPW").asText();
-        jwtService.verifyToken(request, response, username);
-        service.updatePassword(username, newPassword);
+
+        if(jwtService.isValidToken(request, response, username)) {
+            service.updatePassword(username, newPassword);
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not authorized");
+        }
     }
 
     @DeleteMapping("/delete/{username}/{password}")
     public void removeUser(@PathVariable String username, @PathVariable String password, HttpServletRequest request, HttpServletResponse response) {
-        jwtService.verifyToken(request, response, username);
-        service.deleteUser(username, password);
+        if(jwtService.isValidToken(request, response, username)) {
+            service.deleteUser(username, password);
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not authorized");
+        }
     }
 
     @DeleteMapping("/userLogout")

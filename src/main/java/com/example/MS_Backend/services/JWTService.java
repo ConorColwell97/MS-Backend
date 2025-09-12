@@ -50,7 +50,7 @@ public class JWTService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public void verifyToken(HttpServletRequest request, HttpServletResponse response, String username) {
+    public boolean isValidToken(HttpServletRequest request, HttpServletResponse response, String username) {
         Cookie[] cookies = request.getCookies();
         boolean expired = false;
 
@@ -69,16 +69,17 @@ public class JWTService {
                     expired = true;
                 } catch(JwtException e) {
                     System.out.println("This token is not valid");
-                    throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not an authorized user");
+                    return false;
                 }
             }
         } else {
             System.out.println("Cookie expired or removed");
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not an authorized user");
+            return false;
         }
 
         if(expired) {
             generateToken(username, response);
         }
+        return true;
     }
 }
