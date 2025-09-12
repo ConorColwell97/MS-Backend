@@ -39,7 +39,7 @@ public class JWTService {
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
-                .maxAge(1800)
+                .maxAge(1860)
                 .sameSite("None")
                 .build();
         response.setHeader("Set-Cookie", cookie.toString());
@@ -53,6 +53,7 @@ public class JWTService {
     public void verifyToken(HttpServletRequest request, HttpServletResponse response, String username) {
         Cookie[] cookies = request.getCookies();
         boolean expired = false;
+
 
         if(cookies != null) {
             for(Cookie cookie : cookies) {
@@ -74,7 +75,6 @@ public class JWTService {
             }
         } else {
             System.out.println("Cookie expired or removed");
-            expired = true;
         }
 
         if(expired) {
