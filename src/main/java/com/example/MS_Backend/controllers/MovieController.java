@@ -33,61 +33,55 @@ public class MovieController {
 
     @GetMapping("/mymovies/{username}/{filters}")
     public List<Map<String, String>> getMovies(@PathVariable String username, @PathVariable String filters, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        if(verify(request, response, username)) {
-            return service.searchMovies(filters);
-        }
-        throw new RuntimeException("Authentication error");
+        jwtService.verifyToken(request, response, username);
+        return service.searchMovies(filters);
     }
 
     @PutMapping("/addmovies/{username}")
     public void addMovies(@PathVariable String username, @RequestBody List<Map<String, String>> movies, HttpServletRequest request, HttpServletResponse response) {
-        if(verify(request, response, username)) {
-            service.addMovies(username, movies);
-        }
+        jwtService.verifyToken(request, response, username);
+        service.addMovies(username, movies);
     }
 
     @GetMapping("/getmovies/{username}")
     public JsonNode getMoviesByUser(@PathVariable String username, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        if(verify(request, response, username)) {
-            return service.getMovies(username);
-        }
-        throw new RuntimeException("Authentication error");
+        jwtService.verifyToken(request, response, username);
+        return service.getMovies(username);
     }
 
     @PatchMapping("/deletemovies/{username}")
     public void removeMovies(@PathVariable String username, @RequestBody List<String> titles, HttpServletRequest request, HttpServletResponse response) {
-        if(verify(request, response, username)) {
-            service.deleteMovies(username, titles);
-        }
+        jwtService.verifyToken(request, response, username);
+        service.deleteMovies(username, titles);
     }
 
-    public boolean verify(HttpServletRequest request, HttpServletResponse response, String username) {
-        Cookie[] cookies = request.getCookies();
-        boolean expired = false;
-
-        if(cookies != null) {
-            for(Cookie cookie : cookies) {
-                String token = cookie.getValue();
-                try {
-                    Claims claims = Jwts.parser()
-                            .verifyWith(jwtService.getKey())
-                            .build()
-                            .parseSignedClaims(token)
-                            .getPayload();
-
-                } catch(ExpiredJwtException e) {
-                    System.out.println("Token expired");
-                    throw new RuntimeException(e);
-                } catch(JwtException e) {
-                    System.out.println("This token is not valid");
-                    throw new RuntimeException(e);
-                }
-            }
-        } else {
-            System.out.println("Cookie expired or removed");
-            return false;
-        }
-
+//    public boolean verify(HttpServletRequest request, HttpServletResponse response, String username) {
+//        Cookie[] cookies = request.getCookies();
+//        boolean expired = false;
+//
+//        if(cookies != null) {
+//            for(Cookie cookie : cookies) {
+//                String token = cookie.getValue();
+//                try {
+//                    Claims claims = Jwts.parser()
+//                            .verifyWith(jwtService.getKey())
+//                            .build()
+//                            .parseSignedClaims(token)
+//                            .getPayload();
+//
+//                } catch(ExpiredJwtException e) {
+//                    System.out.println("Token expired");
+//                    throw new RuntimeException(e);
+//                } catch(JwtException e) {
+//                    System.out.println("This token is not valid");
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        } else {
+//            System.out.println("Cookie expired or removed");
+//            return false;
+//        }
+//
 //        if(expired) {
 //            String token = jwtService.generateToken(username);
 //
@@ -100,6 +94,6 @@ public class MovieController {
 //                    .build();
 //            response.setHeader("Set-Cookie", cookie.toString());
 //        }
-        return true;
-    }
+//        return true;
+//    }
 }
