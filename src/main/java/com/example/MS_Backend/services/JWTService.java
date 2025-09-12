@@ -54,7 +54,6 @@ public class JWTService {
         Cookie[] cookies = request.getCookies();
         boolean expired = false;
 
-
         if(cookies != null) {
             for(Cookie cookie : cookies) {
                 String token = cookie.getValue();
@@ -75,6 +74,7 @@ public class JWTService {
             }
         } else {
             System.out.println("Cookie expired or removed");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not an authorized user");
         }
 
         if(expired) {
