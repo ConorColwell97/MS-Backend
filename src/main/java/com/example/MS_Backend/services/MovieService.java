@@ -43,14 +43,6 @@ public class MovieService {
         this.objectMapper = objectMapper;
     }
 
-//    public JsonNode getGenres() throws Exception {
-//        String url = "https://api.themoviedb.org/3/genre/movie/list?api_key="+ apiKey + "&language=en-US";
-//        String response = restTemplate.getForObject(url, String.class);
-//
-//        JsonNode json = objectMapper.readTree(response);
-//        return json.get("genres");
-//    }
-
     public List<Map<String, String>> searchMovies(String filters) throws Exception {
         String url = "http://api.themoviedb.org/3/discover/movie?api_key=" + apiKey + "&" + filters;
 
