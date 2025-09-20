@@ -2,7 +2,6 @@ package com.example.MS_Backend.services;
 
 import com.example.MS_Backend.models.User;
 import com.example.MS_Backend.repository.UserRepo;
-import com.mongodb.MongoWriteException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -30,6 +29,8 @@ public class UserService {
     public String addUser(User user) {
         User duplicate = repo.findByUsername(user.getUsername()).orElse(null);
 
+        /* Currently cannot use indexing for making fields unique in database due to storage reasons.
+         This is a workaround */
         if(duplicate != null) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Duplicate user");
         }
@@ -39,11 +40,8 @@ public class UserService {
         try {
             repo.save(user);
             return user.getUsername() + " created";
-        } catch(MongoWriteException e) {
-            if (e.getError().getCategory() == com.mongodb.ErrorCategory.DUPLICATE_KEY) {
-                throw new RuntimeException("Username '"+user.getUsername()+"' already exists");
-            }
-            throw e;
+        } catch(Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
